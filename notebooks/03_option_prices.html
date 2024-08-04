@@ -3030,17 +3030,14 @@ vertical-align: -.125em;
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#matching-market-option-prices" id="toc-matching-market-option-prices" class="nav-link active" data-scroll-target="#matching-market-option-prices"><span class="header-section-number">1</span> Matching Market Option Prices</a>
-  <ul class="collapse">
-  <li><a href="#importing-packages" id="toc-importing-packages" class="nav-link" data-scroll-target="#importing-packages"><span class="header-section-number">1.1</span> Importing Packages</a></li>
-  <li><a href="#reading-in-cleaned-holdings-file" id="toc-reading-in-cleaned-holdings-file" class="nav-link" data-scroll-target="#reading-in-cleaned-holdings-file"><span class="header-section-number">1.2</span> Reading-In Cleaned Holdings File</a></li>
-  <li><a href="#adding-d2x-upx-moneyness-rf-div-columns-to-df_holdings" id="toc-adding-d2x-upx-moneyness-rf-div-columns-to-df_holdings" class="nav-link" data-scroll-target="#adding-d2x-upx-moneyness-rf-div-columns-to-df_holdings"><span class="header-section-number">1.3</span> Adding <code>D2X</code>, <code>UPX</code>, <code>Moneyness</code>, <code>RF</code>, <code>DIV</code> Columns to <code>df_holdings</code></a></li>
-  <li><a href="#adding-volatilitysurface-column-from-supplied-spx-vol-surface" id="toc-adding-volatilitysurface-column-from-supplied-spx-vol-surface" class="nav-link" data-scroll-target="#adding-volatilitysurface-column-from-supplied-spx-vol-surface"><span class="header-section-number">1.4</span> Adding <code>VolatilitySurface</code> Column from Supplied SPX Vol Surface</a></li>
-  <li><a href="#adding-volatilityimplied-column-implied-from-market-option-prices" id="toc-adding-volatilityimplied-column-implied-from-market-option-prices" class="nav-link" data-scroll-target="#adding-volatilityimplied-column-implied-from-market-option-prices"><span class="header-section-number">1.5</span> Adding <code>VolatilityImplied</code> Column Implied from Market Option Prices</a></li>
-  <li><a href="#creating-option-pricing-functions" id="toc-creating-option-pricing-functions" class="nav-link" data-scroll-target="#creating-option-pricing-functions"><span class="header-section-number">1.6</span> Creating Option Pricing Functions</a></li>
-  <li><a href="#calculating-comparing-option-prices" id="toc-calculating-comparing-option-prices" class="nav-link" data-scroll-target="#calculating-comparing-option-prices"><span class="header-section-number">1.7</span> Calculating &amp; Comparing Option Prices</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">1.8</span> Conclusion</a></li>
-  </ul></li>
+  <li><a href="#importing-packages" id="toc-importing-packages" class="nav-link active" data-scroll-target="#importing-packages"><span class="header-section-number">1</span> Importing Packages</a></li>
+  <li><a href="#reading-in-holdings-file" id="toc-reading-in-holdings-file" class="nav-link" data-scroll-target="#reading-in-holdings-file"><span class="header-section-number">2</span> Reading-In Holdings File</a></li>
+  <li><a href="#d2x-upx-moneyness-rf-div" id="toc-d2x-upx-moneyness-rf-div" class="nav-link" data-scroll-target="#d2x-upx-moneyness-rf-div"><span class="header-section-number">3</span> <code>D2X</code>, <code>UPX</code>, <code>Moneyness</code>, <code>RF</code>, <code>DIV</code></a></li>
+  <li><a href="#volatilitysurface-supplied-spx-vol-surface" id="toc-volatilitysurface-supplied-spx-vol-surface" class="nav-link" data-scroll-target="#volatilitysurface-supplied-spx-vol-surface"><span class="header-section-number">4</span> <code>VolatilitySurface</code> Supplied SPX Vol Surface</a></li>
+  <li><a href="#volatilityimplied-implied-from-market-option-prices" id="toc-volatilityimplied-implied-from-market-option-prices" class="nav-link" data-scroll-target="#volatilityimplied-implied-from-market-option-prices"><span class="header-section-number">5</span> <code>VolatilityImplied</code> Implied from Market Option Prices</a></li>
+  <li><a href="#creating-option-pricing-functions" id="toc-creating-option-pricing-functions" class="nav-link" data-scroll-target="#creating-option-pricing-functions"><span class="header-section-number">6</span> Creating Option Pricing Functions</a></li>
+  <li><a href="#calculating-comparing-option-prices" id="toc-calculating-comparing-option-prices" class="nav-link" data-scroll-target="#calculating-comparing-option-prices"><span class="header-section-number">7</span> Calculating &amp; Comparing Option Prices</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">8</span> Conclusion</a></li>
   </ul>
 </nav>
 </div>
@@ -3075,17 +3072,15 @@ vertical-align: -.125em;
 
 </header>
 
-<section id="matching-market-option-prices" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Matching Market Option Prices</h1>
-<p>In order to get comfortable with the data I decided to try to recreate the market option prices in the holdings file. I used a variety of methods for trying to do so:</p>
+<p>In order to get comfortable with the data I decided to try to recreate the market option prices in the holdings file. I used a variety of methods::</p>
 <ol type="1">
-<li><p>Using the market data provided (SPX implied volatility surface, risk-free rates, etc.) along with Black-Scholes-Merton option pricing forumla.</p></li>
+<li><p>Using the market data provided (SPX implied volatility surface, risk-free rates, etc.) along with Black-Scholes-Merton (BSM) option pricing forumla.</p></li>
 <li><p>Using the market data provided (SPX implied volatility surface, risk-free rates, etc.) along with a binomial-tree pricing function that I coded up. My hope was that this would lead to more accurate pricing, because the SPY options are American. But this didn’t turn out to be the case.</p></li>
-<li><p>Implied volatility from option prices. Obviously, this would recreate the option prices exactly, but I don’t know if it would lead to the most accurate greeks.</p></li>
+<li><p>Using BSM implied volatility from option prices with both the BSM and binomial models. Obviously, this would recreate the option prices exactly when using the BSM pricing formulas, but I don’t know if it would lead to the most accurate greeks.</p></li>
 </ol>
-<p>This exercise led me to use market price implied vols to calculate my greeks in the next report.</p>
-<section id="importing-packages" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="importing-packages"><span class="header-section-number">1.1</span> Importing Packages</h2>
+<p>This exercise led me to use market price implied vols, along with the BSM greeks formulas, to calculate my greeks in the next report.</p>
+<section id="importing-packages" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="importing-packages"><span class="header-section-number">1</span> Importing Packages</h2>
 <p>Let’s start by importing the core packages <strong>numpy</strong> and <strong>pandas</strong>.</p>
 <div class="cell">
 <details>
@@ -3095,8 +3090,8 @@ vertical-align: -.125em;
 </details>
 </div>
 </section>
-<section id="reading-in-cleaned-holdings-file" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="reading-in-cleaned-holdings-file"><span class="header-section-number">1.2</span> Reading-In Cleaned Holdings File</h2>
+<section id="reading-in-holdings-file" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="reading-in-holdings-file"><span class="header-section-number">2</span> Reading-In Holdings File</h2>
 <p>Next, we read in the hodlings file that we cleaned in a prior notebook.</p>
 <div class="cell">
 <details>
@@ -3288,8 +3283,8 @@ vertical-align: -.125em;
 </div>
 </div>
 </section>
-<section id="adding-d2x-upx-moneyness-rf-div-columns-to-df_holdings" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="adding-d2x-upx-moneyness-rf-div-columns-to-df_holdings"><span class="header-section-number">1.3</span> Adding <code>D2X</code>, <code>UPX</code>, <code>Moneyness</code>, <code>RF</code>, <code>DIV</code> Columns to <code>df_holdings</code></h2>
+<section id="d2x-upx-moneyness-rf-div" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="d2x-upx-moneyness-rf-div"><span class="header-section-number">3</span> <code>D2X</code>, <code>UPX</code>, <code>Moneyness</code>, <code>RF</code>, <code>DIV</code></h2>
 <p>At this point we can add a variety of columns, mostly from the data files that were provided for the assignment. Notice that we use simple linear interpolation from <strong>numpy</strong> for the various curves. In a more high stakes environment I might fit a parametric curve to the data to avoid overfitting.</p>
 <div class="cell">
 <details>
@@ -3590,9 +3585,9 @@ vertical-align: -.125em;
 </div>
 </div>
 </section>
-<section id="adding-volatilitysurface-column-from-supplied-spx-vol-surface" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="adding-volatilitysurface-column-from-supplied-spx-vol-surface"><span class="header-section-number">1.4</span> Adding <code>VolatilitySurface</code> Column from Supplied SPX Vol Surface</h2>
-<p>Next, we add the implied volatility from the implied vol surface that was supplied. Here we are using multi-dimensional linear interpolation, <code>LinearNDInterpolator</code>, from the <strong>scipy</strong> package. Notice, that <code>LinearNDInterpolator</code> does not have built-in extrapolation functionality. I did some research in this is intentional - the creators of <strong>scipy</strong> want users to create their own extrapolation logic. I didn’t want to bother for this analysis, so I just set a <code>fill_value=0.25</code>. This was done by heuristically seeing which fixed <code>fill_value</code> led to the best price matching. In a more high-stakes context I would do something more nuanced.</p>
+<section id="volatilitysurface-supplied-spx-vol-surface" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="volatilitysurface-supplied-spx-vol-surface"><span class="header-section-number">4</span> <code>VolatilitySurface</code> Supplied SPX Vol Surface</h2>
+<p>Next, we add the implied volatility from the implied vol surface that was supplied. Here we are using multi-dimensional linear interpolation, <code>LinearNDInterpolator</code>, from the <strong>scipy</strong> package. Notice, that <code>LinearNDInterpolator</code> does not have built-in extrapolation functionality. I did some research and this is intentional - the creators of <strong>scipy</strong> want users to create their own extrapolation logic. I didn’t want to bother for this analysis, so I just set a <code>fill_value=0.25</code>. This was done by heuristically seeing which fixed <code>fill_value</code> led to the best price matching. In a more high-stakes context I would probably create my own extrapolation logic.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -3874,10 +3869,10 @@ vertical-align: -.125em;
 </div>
 </div>
 </section>
-<section id="adding-volatilityimplied-column-implied-from-market-option-prices" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="adding-volatilityimplied-column-implied-from-market-option-prices"><span class="header-section-number">1.5</span> Adding <code>VolatilityImplied</code> Column Implied from Market Option Prices</h2>
-<p>Let’s now calculated implied volatilities based on the market option prices. In order to do this we use the <strong>py_vollib</strong> package which is great for Black-Scholes-Merton pricing calculations. We first have to convert the <code>implied_volatility()</code> function into a form that can be used in the <strong>pandas</strong> <code>DataFrame.apply()</code> method.</p>
-<p>Note: for the deep ITM calls, the <code>implied_volatility()</code> function was throwing an error. I think this is because there are tax/regulatory reasons why deep ITM calls have a price that deviated from theoretically sound values. Thus, for <code>Moneyness &lt; 0.1</code>, I simply set the implied volatility equal to <code>0.25</code>.</p>
+<section id="volatilityimplied-implied-from-market-option-prices" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="volatilityimplied-implied-from-market-option-prices"><span class="header-section-number">5</span> <code>VolatilityImplied</code> Implied from Market Option Prices</h2>
+<p>Let’s now calculate implied volatilities based on the market option prices. In order to do this we use the <strong>py_vollib</strong> package which is great for Black-Scholes-Merton pricing calculations. We first have to convert the <code>implied_volatility()</code> function into a form that can be used in the <strong>pandas</strong> <code>DataFrame.apply()</code> method.</p>
+<p>Note: for the deep ITM calls, the <code>implied_volatility()</code> function was throwing an error. I think this is because there are tax/regulatory reasons why deep ITM calls can have a price that deviates from theoretically sound values. Thus, for <code>Moneyness &lt; 0.1</code>, I simply set the implied volatility equal to <code>0.25</code>.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -4174,8 +4169,8 @@ vertical-align: -.125em;
 </div>
 </div>
 </section>
-<section id="creating-option-pricing-functions" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="creating-option-pricing-functions"><span class="header-section-number">1.6</span> Creating Option Pricing Functions</h2>
+<section id="creating-option-pricing-functions" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="creating-option-pricing-functions"><span class="header-section-number">6</span> Creating Option Pricing Functions</h2>
 <p>Next, we create the the option pricing functions, for both Black-Scholes-Merton an the binomial model. Notice, that just as above, they need to be converted into a form that can be used in the <code>DataFrame.apply()</code> method.</p>
 <div class="cell">
 <details>
@@ -4261,10 +4256,10 @@ vertical-align: -.125em;
 </details>
 </div>
 </section>
-<section id="calculating-comparing-option-prices" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="calculating-comparing-option-prices"><span class="header-section-number">1.7</span> Calculating &amp; Comparing Option Prices</h2>
+<section id="calculating-comparing-option-prices" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="calculating-comparing-option-prices"><span class="header-section-number">7</span> Calculating &amp; Comparing Option Prices</h2>
 <p>Now, let’s use our <code>bsm_px()</code> and <code>crr_px</code> pricing functions in combination with the <code>VolatilitySurface</code> and <code>VolatilityImplied</code> to calculate and compare option prices.</p>
-<p>Not suprisingly, from visual inspection we can see that the BSM + Implied has the tightest correlation to the market prices, which should be true by construction.</p>
+<p>Not suprisingly, from visual inspection we can see that the BSM + Implied has the tightest correlation to the market prices, which should be true by construction. Note, that we are focused on relatively low priced options.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -4379,10 +4374,9 @@ vertical-align: -.125em;
 </div>
 </div>
 </section>
-<section id="conclusion" class="level2" data-number="1.8">
-<h2 data-number="1.8" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">1.8</span> Conclusion</h2>
-<p>For the purposes of calculating the portfolio greeks in the subsequent analyses I will you the implied volatilities from the market prices, along with the Black-Scholes-Merton formulas for the greeks. I’m not entirely sure that this will lead to the most accurate greeks, but will be much more straight forward than using the binomial American model.</p>
-</section>
+<section id="conclusion" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">8</span> Conclusion</h2>
+<p>For the purposes of calculating the portfolio greeks in the subsequent analyses I will use the implied volatilities from the market prices, along with the Black-Scholes-Merton formulas for the greeks. I’m not entirely sure that this will lead to the most accurate greeks, but will be much more straight forward than using the binomial American model.</p>
 </section>
 
 </main>
